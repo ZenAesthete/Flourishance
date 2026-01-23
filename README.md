@@ -215,10 +215,12 @@ The UI follows a **"Glassmorphic Dashboard"** aesthetic designed for flow state:
 
 ## 📄 License
 
-  
+This project is dual-licensed:
 
-Distributed under the MIT License. See `LICENSE` for more information.
+- **AGPL-3.0** — see `LICENSE-AGPL`
+- **PolyForm Noncommercial 1.0.0** — see `LICENSE-NONCOMMERCIAL`
 
+Noncommercial use is permitted under PolyForm NC. Commercial use is permitted only under AGPL-3.0 (or a separate written commercial license).
   
 
 <div  align="center">
