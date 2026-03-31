@@ -8,14 +8,14 @@ import { Rule, PortfolioCategory, Identity, InterrupterLog, DecisionResult, Week
 const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 // 2. MODEL ID
-const MODEL_ID = "openai/gpt-oss-120b:free";
+const MODEL_ID = "google/gemma-3-27b-it:free";
 
 // ============================================================================
 
 const getApiKey = () => {
   // Vite exposes env variables prefixed with VITE_ on import.meta.env
-  const key = (import.meta as any).env?.VITE_OPENROUTER_API_KEY || 
-              (import.meta as any).env?.VITE_API_KEY;
+  const key = (import.meta as any).env?.VITE_OPENROUTER_API_KEY ||
+    (import.meta as any).env?.VITE_API_KEY;
 
   if (!key) {
     console.warn("Missing API Key. Please add VITE_OPENROUTER_API_KEY to your .env file or Vercel Settings.");
@@ -40,7 +40,7 @@ const getContextData = () => {
  */
 async function aiRequest(systemPrompt: string, userPrompt: string): Promise<any> {
   const apiKey = getApiKey();
-  
+
   if (!apiKey) {
     throw new Error("API Key is missing. Check settings.");
   }
@@ -75,20 +75,20 @@ async function aiRequest(systemPrompt: string, userPrompt: string): Promise<any>
     if (!response.ok) {
       const errorText = await response.text();
       let errorMsg = `API Error (${response.status})`;
-      
+
       try {
         const json = JSON.parse(errorText);
         if (json.error?.metadata?.provider_name) {
-           errorMsg = `Provider Error (${json.error.metadata.provider_name}): ${json.error.message}`;
+          errorMsg = `Provider Error (${json.error.metadata.provider_name}): ${json.error.message}`;
         } else {
-           errorMsg = json.error?.message || json.message || errorMsg;
+          errorMsg = json.error?.message || json.message || errorMsg;
         }
       } catch (e) {
         errorMsg = errorText || errorMsg;
       }
 
       if (errorMsg.includes("publication violation") || errorMsg.includes("data policy")) {
-         errorMsg += " \n(HINT: Go to openrouter.ai/settings/privacy and enable data logging for free models)";
+        errorMsg += " \n(HINT: Go to openrouter.ai/settings/privacy and enable data logging for free models)";
       }
 
       throw new Error(errorMsg);
@@ -103,18 +103,18 @@ async function aiRequest(systemPrompt: string, userPrompt: string): Promise<any>
 
     const firstBrace = cleanContent.indexOf('{');
     const lastBrace = cleanContent.lastIndexOf('}');
-    
+
     if (firstBrace !== -1 && lastBrace !== -1) {
-       const jsonString = cleanContent.substring(firstBrace, lastBrace + 1);
-       try {
-         return JSON.parse(jsonString);
-       } catch (e) {
-         console.warn("JSON Parse Error. Raw content:", cleanContent);
-         throw new Error("AI response was not valid JSON. Try a different model.");
-       }
+      const jsonString = cleanContent.substring(firstBrace, lastBrace + 1);
+      try {
+        return JSON.parse(jsonString);
+      } catch (e) {
+        console.warn("JSON Parse Error. Raw content:", cleanContent);
+        throw new Error("AI response was not valid JSON. Try a different model.");
+      }
     } else {
-       console.warn("No JSON structure found. Raw content:", cleanContent);
-       throw new Error("AI response did not contain JSON.");
+      console.warn("No JSON structure found. Raw content:", cleanContent);
+      throw new Error("AI response did not contain JSON.");
     }
 
   } catch (error) {
@@ -241,7 +241,7 @@ export const runDeepDiveAnalysis = async (
   const system = `You are an Analyst. Output ONLY valid JSON.
   Format: { "title": "string", "items": [{ "label": "string", "content": "string" }], "summary": "string" }`;
 
-  const user = mode === '5whys' 
+  const user = mode === '5whys'
     ? `5 Whys Analysis on: "${topic}". CONTEXT: ${getContextData()}. Output ONLY JSON.`
     : `Pre-Mortem on: "${topic}". CONTEXT: ${getContextData()}. Output ONLY JSON.`;
 
@@ -257,17 +257,17 @@ export const generateSpark = async (): Promise<SparkResult> => {
     "Systems Engineering", "Philosophy of Science", "Cybernetics", "Behavioral Economics",
     "Linguistics", "Urban Theory"
   ];
-  
+
   // 2. Varied Formats
   const formats = [
-    "A counter-intuitive truth", "A razor (decision heuristic)", "A paradox", 
+    "A counter-intuitive truth", "A razor (decision heuristic)", "A paradox",
     "A reframing of a common problem", "A cautionary observation", "A biological analogy",
     "A law of human nature", "A probability concept", "A hidden incentive"
   ];
 
   // 3. Tone/Vibe
   const tones = [
-    "Direct and punchy", "Contemplative and deep", "Analytical and sharp", 
+    "Direct and punchy", "Contemplative and deep", "Analytical and sharp",
     "Witty and dry", "Urgent and actionable"
   ];
 
@@ -293,14 +293,14 @@ export const generateSpark = async (): Promise<SparkResult> => {
   Output ONLY JSON.`;
 
   try {
-     const result = await aiRequest(system, user);
-     return {
-       ...result,
-       // Fallback for category if model hallucinates a different one
-       category: result.category || domain
-     } as SparkResult;
+    const result = await aiRequest(system, user);
+    return {
+      ...result,
+      // Fallback for category if model hallucinates a different one
+      category: result.category || domain
+    } as SparkResult;
   } catch (e) {
     console.error("Spark Error", e);
-     return { title: "Connection Error", content: "Could not ignite spark. Please check your internet.", category: "Error" };
+    return { title: "Connection Error", content: "Could not ignite spark. Please check your internet.", category: "Error" };
   }
 };
