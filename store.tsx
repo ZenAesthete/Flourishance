@@ -39,33 +39,7 @@ interface AppState {
 
 const AppContext = createContext<AppState | undefined>(undefined);
 
-const SEED_IDENTITIES: Identity[] = [
-  { id: '1', statement: "I am disciplined with my attention.", proofs: ["25m deep work", "No phone first 30m", "Clear inbox"], strength: 65, votes: 12, downvotes: 2, streak: 3, lastVoteDate: Date.now() - 100000000 },
-  { id: '2', statement: "I am physically resilient.", proofs: ["10m stretching", "Morning walk", "Cold shower", "Warm tea meditation"], strength: 40, votes: 5, downvotes: 3, streak: 0 },
-  { id: '3', statement: "I am a finisher.", proofs: ["Close open loops", "Ship one update"], strength: 80, votes: 30, downvotes: 1, streak: 12, lastVoteDate: Date.now() },
-];
 
-const SEED_RULES: Rule[] = [
-  { id: '1', category: 'rule', text: "No screens after 10:30 PM." },
-  { id: '2', category: 'principle', text: "If overwhelmed: reduce scope, not standards." },
-  { id: '3', category: 'value', text: "Clarity over comfort." },
-];
-
-const SEED_PORTFOLIO: PortfolioCategory[] = [
-  { id: '1', name: 'Health', description: "Physical vitality, sleep quality, and energy baseline.", weight: 10, investment: 7, controllability: 9, lastUpdated: Date.now() },
-  { id: '2', name: 'Wealth', description: "Financial runway, resource acquisition, and security.", weight: 8, investment: 5, controllability: 6, lastUpdated: Date.now() },
-  { id: '3', name: 'Relationships', description: "Social capital, intimacy, and community connection.", weight: 9, investment: 4, controllability: 5, lastUpdated: Date.now() }, 
-  { id: '4', name: 'Learning', description: "Skill acquisition, mental plasticity, and curiosity.", weight: 6, investment: 3, controllability: 10, lastUpdated: Date.now() },
-  { id: '5', name: 'Peace', description: "Internal stability, stress management, and spiritual grounding.", weight: 10, investment: 2, controllability: 10, lastUpdated: Date.now() },
-  { id: '6', name: 'Fun', description: "Novelty, play, and dopaminergic recovery.", weight: 5, investment: 1, controllability: 8, lastUpdated: Date.now() },
-  { id: '7', name: 'Purpose', description: "North star alignment and contribution to the whole.", weight: 9, investment: 6, controllability: 7, lastUpdated: Date.now() },
-  { id: '8', name: 'Environment', description: "Physical space, digital clutter, and aesthetic order.", weight: 7, investment: 8, controllability: 10, lastUpdated: Date.now() },
-];
-
-const SEED_FAILURES: FailureMode[] = [
-  { id: '1', name: 'Doomscroll Spiral', trigger: 'Tired + Phone in hand', protocol: ['Drop phone', 'Drink water'] },
-  { id: '2', name: 'Avoidance Loop', trigger: 'Big undefined task', protocol: ['5 min timer', 'Change room'] },
-];
 
 function usePersistedState<T>(key: string, initialValue: T) {
   const [state, setState] = useState<T>(() => {
@@ -87,10 +61,10 @@ function usePersistedState<T>(key: string, initialValue: T) {
 }
 
 export const AppProvider = ({ children }: { children?: ReactNode }) => {
-  const [identities, setIdentities] = usePersistedState<Identity[]>('selfos_identities', SEED_IDENTITIES);
-  const [rules, setRules] = usePersistedState<Rule[]>('selfos_rules', SEED_RULES);
-  const [portfolio, setPortfolio] = usePersistedState<PortfolioCategory[]>('selfos_portfolio', SEED_PORTFOLIO);
-  const [failureModes, setFailureModes] = usePersistedState<FailureMode[]>('selfos_failures', SEED_FAILURES);
+  const [identities, setIdentities] = usePersistedState<Identity[]>('selfos_identities', []);
+  const [rules, setRules] = usePersistedState<Rule[]>('selfos_rules', []);
+  const [portfolio, setPortfolio] = usePersistedState<PortfolioCategory[]>('selfos_portfolio', []);
+  const [failureModes, setFailureModes] = usePersistedState<FailureMode[]>('selfos_failures', []);
   const [interrupterLogs, setInterrupterLogs] = usePersistedState<InterrupterLog[]>('selfos_logs', []);
   const [energyLevel, setEnergyLevel] = usePersistedState<'Low' | 'Moderate' | 'High'>('selfos_energy', 'High');
   const [dailyStack, setDailyStack] = usePersistedState<SmartStackItem[]>('selfos_daily_stack', []);
