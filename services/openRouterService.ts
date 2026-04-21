@@ -8,7 +8,7 @@ import { Rule, PortfolioCategory, Identity, InterrupterLog, DecisionResult, Week
 const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 // 2. MODEL ID
-const MODEL_ID = "google/gemma-3-27b-it:free";
+const MODEL_ID = "openrouter/elephant-alpha";
 
 // ============================================================================
 
